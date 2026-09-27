@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(git:*)",
+      "Shell(mkdir:*)",
+      "Shell(curl -sL https://raw.githubusercontent.com/HomelessPhD/AR_Puzzles/main/PZL12/Puzzle_Weave_12.html -o /pzl12/page.html)",
+      "Shell(sed:*)",
+      "Shell(awk:*)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

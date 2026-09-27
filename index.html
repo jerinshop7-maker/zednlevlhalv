@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+ 	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ 	<title>Crypto Puzzles by Zden</title>
+ 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 	<link rel="icon" href="favico.png" type="image/png">
+ 	<link rel="preconnect" href="https://fonts.gstatic.com">
+ 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap" rel="stylesheet">
+ 	<style type="text/css">
+
+  @media only screen and (min-width:1024px) {
+ 		html {
+ 			font: 12px/1.3 Roboto, sans-serif;
+ 			background: #000;
+ 			color: #fff;
+			background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.4)), url(background-dim.gif) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+ 		}
+  }
+
+  @media only screen and (max-width:1023px) {
+    html {
+      font: 12px/1.3 Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.4)), url(background-dim-rot.gif) center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      background-attachment: scroll;
+    }
+  }
+
+ 		html, body {
+ 			height: 100%;
+      -webkit-text-size-adjust: 100%;
+ 		}
+
+ 		body {
+ 			margin: 0;
+ 			display: flex;
+ 			flex-direction: column;
+ 		}
+
+		div.footer {
+  			width:100%;
+  			position:fixed;
+  			bottom:1%;
+  			left:0%;
+  			margin:600px 0 0 0px;
+  			background: rgba(0,0,0,0.5);
+		}
+
+ 		main {
+ 			flex: 1 0 auto;
+ 			display: flex;
+ 			flex-direction: column;
+ 			justify-content: space-around;
+ 			justify-content: space-evenly;
+ 		}
+
+ 		footer {
+ 			flex-shrink: 0;
+ 			font-size: 14px;
+ 			text-align: center;
+ 			padding: 5px 0;
+ 		}
+
+ 		header {
+ 			text-align: center;
+ 			margin: 20px 0 20px;
+ 		}
+
+ 		.logo {
+ 			animation: anim__rotate 60s linear infinite;
+ 		}
+
+ 		h1 {
+ 			margin: 0 10px;
+ 			font-weight: 900;
+ 		}
+
+ 		h1 img {
+ 			width: 64px;
+ 			vertical-align: -40%;
+ 		}
+
+ 		h1 span {
+ 			white-space: nowrap;
+ 		}
+
+ 		.prods {
+ 			display: flex;
+ 			flex-wrap: wrap;
+ 			justify-content: space-around;
+ 			z-index:0;
+ 		}
+
+ 		.prod {
+ 			display: block;
+ 			text-decoration: none;
+ 			margin: 10px;
+ 		}
+
+ 		.item
+ 		{
+ 			min-height:600px;
+ 		}
+ 		.item_last
+ 		{
+ 			min-height:700px;
+ 		}
+ 		.item_dummy
+ 		{
+ 			min-height:0px;
+ 			width: 306px;
+ 		}
+
+ 		.prod__bg {
+ 			display: block;
+ 			width: 256px;
+ 			height: 256px;
+ 			background-repeat: no-repeat;
+ 			background-size: 100% 100%;
+ 			color: rgba(0,0,0,0);
+ 			transition: transform 0.5s;
+ 			transform: translateY(0);
+ 			z-index: 0;
+ 		}
+
+ 		.prod_text {
+ 			display: block;
+ 			width: 236px;
+ 			text-decoration: none;
+ 			margin: 10px;
+ 			padding: 10px;
+ 			color: rgba(255,255,255,255);
+ 			background: linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.4) 10%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%);
+ 			z-index: 0;
+ 			text-shadow: 2px 2px #000000;
+ 		}
+
+ 		.prod_title {
+ 			display: block;
+ 			width: 236px;
+ 			font-weight: bold;
+ 			font-size: 125%;
+ 			margin: 20px;
+ 			color: rgba(255,255,255,255);
+ 			background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%);
+ 			padding:5px;
+ 			z-index: 0;
+ 		}
+
+		a {
+  			color: white;
+  			font-weight: normal;
+  			text-decoration: none;
+		}
+		a:hover {
+  			color: black;
+  			background-color: white;
+  			text-shadow: 0px 0px #000000;
+		}
+
+		table {
+        	padding: 0px;
+        	margin: 0px;
+        	border: none;
+        	border-collapse: collapse;
+        	border-spacing: 0px;
+		}
+
+
+ 		.prod_btc1 .prod__bg { background-image: url('crypto1-ico.png'); }
+ 		.prod_btc2 .prod__bg { background-image: url('crypto2-ico.png'); }
+ 		.prod_btc3 .prod__bg { background-image: url('crypto3-ico.png'); }
+ 		.prod_btc4 .prod__bg { background-image: url('crypto4-ico.png'); }
+ 		.prod_btc5 .prod__bg { background-image: url('crypto5fix-ico.png'); }
+ 		.prod_nethemba .prod__bg { background-image: url('crypto_nethemba-ico.png'); }
+ 		.prod_ltc .prod__bg { background-image: url('LitecoinSegWit-ico.png'); }
+ 		.prod_janus .prod__bg { background-image: url('Janus-ico.png'); }
+ 		.prod_wheels .prod__bg { background-image: url('gate_full-ico.png'); }
+ 		.prod_hcpp17 .prod__bg { background-image: url('hcpp17-cryptopuzzle-ico.png'); }
+ 		.prod_xm17 .prod__bg { background-image: url('cryptoxm17-ico.gif'); }
+ 		.prod_db18 .prod__bg { background-image: url('crypto_db18-ico.png'); }
+ 		.prod_codex1 .prod__bg { background-image: url('CodexPuzzle-ico.png'); }
+ 		.prod_xix .prod__bg { background-image: url('xixoio_puzzle-ico.png'); }
+    .prod_sfx .prod__bg { background-image: url('cryptoSFX-ico.png'); }
+ 		.prod_nextone .prod__bg { background-image: url('crypto-next-one.gif'); }
+    .prod_bwp .prod__bg { background-image: url('1BiTCoiN_WHiTe_PaPeR-ico.gif'); }
+    .prod_halv .prod__bg { background-image: url('cryptoHALV-ico.png'); }
+
+ 		.prod__reflection {
+ 			transform: translateY(0) scale(1, -1);
+ 			-webkit-mask-image: linear-gradient(to bottom, rgba(1,1,1,0) -10%, rgba(1,1,1,0.75) 90%);
+ 			mask-image: linear-gradient(to bottom, rgba(1,1,1,0) -10%, rgba(1,1,1,0.75) 90%);
+ 			position: absolute;
+ 			z-index: -1;
+ 		}
+
+ 		.prod:hover .prod__bg {
+ 			transform: translateY(-5px);
+ 		}
+
+ 		.prod:hover .prod__bg.prod__reflection {
+ 			transform: translateY(5px) scale(1, -1);
+ 		}
+
+ 		@keyframes anim__rotate {
+ 		  0%   { transform: rotate(0deg); }
+ 		  100% { transform: rotate(360deg); }
+ 		}
+ 	</style>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><script id="2d-vertex-shader" type="x-shader/x-vertex">// <![CDATA[
+attribute vec2 a_position;
+  void main() {
+    gl_Position = vec4(a_position, 0, 1);
+  }
+// ]]></script>
+<script id="2d-fragment-shader-main" type="x-shader/x-fragment">// <![CDATA[
+precision highp float;
+
+uniform float time;
+uniform float time_cont;
+uniform vec2 iResolution;
+uniform vec2 mouse_pos;
+
+float v(vec3 s){float y=time_cont,v=0.;vec2 f;float n=3.;for(float x=0.;x<20.;x+=4.){vec2 c=vec2(x*.2,x*.3);f=c*(s.xy+vec2(x*2.,x*10.));v+=sin((.5+mouse_pos.x)*2.+x+y*x*.7+f.x+sin(f.y*x/4.+.5))/2.-cos(x*2.+y*x*.5+f.y-sin(f.x*x/2.5-.5))/2.;v+=cos((.5+mouse_pos.y)*2.+x*3.+y*x*3.7+f.x*1.3+sin(f.x+f.y*x/2.))/2.+cos(x*1.5+y*x*4.5+f.y*2.4)/2.;v-=sin(s.z/10.)*x;}return v;}vec3 n(in vec3 x){vec2 f=vec2(1.,-1.)*.0005;return normalize(f.xyy*v(x+f.xyy)+f.yyx*v(x+f.yyx)+f.yxy*v(x+f.yxy)+f.xxx*v(x+f.xxx));}void main(){vec3 x=vec3(0.,0.,1.-mouse_pos.y/2.5);vec2 f=(gl_FragCoord.xy-.5*iResolution.xy)/iResolution.y;f+=mouse_pos*vec2(-.25,.25);vec3 y=normalize(vec3(f,(-.5+mouse_pos.x)/8.)-x);float s,r=1.;for(int c=0;c<64;c++){s=v(x+y*r);r+=s;if(s<.01)break;}if(s<.01){vec3 m=x+y*r,c=n(m),i=vec3(mouse_pos.x+2.,2.-mouse_pos.y/2.5,mouse_pos.x-mouse_pos.y);float g=clamp(dot(c,normalize(i-m)),mouse_pos.x/-3.,1.-mouse_pos.y/3.);g*=2./dot(i-m,i-m);vec3 d=vec3(g);gl_FragColor=vec4(d,d.x);}else gl_FragColor=vec4(0.,0.,0.,1);}
+
+</script>
+<script type="text/javascript">// <![CDATA[
+  var gl;
+  var canvas;
+  var buffer;
+  var shaderScript;
+  var shaderSource;
+  var vertexShader;
+  var fragmentShader = new Array();
+  var x_res,y_res;
+  var time_now=0;
+  var time_start;
+  var time_loop = 30000;
+  var mouse_pos_x=0.5,mouse_pos_y=0.5;
+  window.onload = init;
+
+
+  function get_time()
+  {
+    return ( new Date ).getTime();
+  }
+
+  function init() {
+
+	canvas        = document.getElementById('glscreen');
+	gl            = canvas.getContext('experimental-webgl');
+	canvas.width  = x_res = window.innerWidth;
+	canvas.height = y_res = window.innerHeight;
+
+  time_start    = get_time();
+
+	gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+
+  buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER, 
+    new Float32Array([
+      -1.0, -1.0, 
+       1.0, -1.0, 
+      -1.0,  1.0, 
+      -1.0,  1.0, 
+       1.0, -1.0, 
+       1.0,  1.0]), 
+    gl.STATIC_DRAW
+  );
+
+  shaderScript = document.getElementById("2d-vertex-shader");
+  shaderSource = shaderScript.text;
+  vertexShader = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vertexShader, shaderSource);
+  gl.compileShader(vertexShader);
+
+  shaderScript   = document.getElementById("2d-fragment-shader-main");
+  shaderSource   = shaderScript.text;
+  fragmentShader[0] = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fragmentShader[0], shaderSource);
+  gl.compileShader(fragmentShader[0]);
+  
+  program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader[0]);
+  gl.linkProgram(program);	
+  gl.useProgram(program);
+  
+	render();
+  }
+
+  function render()
+  {
+    time_now = ( new Date() ).getTime();
+
+    gl.clearColor(1.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+//
+
+    
+//
+    positionLocation = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    attr_time = gl.getUniformLocation(program, "time");
+    var time = (time_now - time_start) % time_loop;
+    gl.uniform1f(attr_time, time / time_loop);
+
+    attr_time = gl.getUniformLocation(program, "time_cont");
+    time = (time_now - time_start) / 100000;
+    gl.uniform1f(attr_time, time);
+
+    attr_res = gl.getUniformLocation(program, "iResolution");
+    gl.uniform2f(attr_res, 1920, 1080);
+
+    MP = gl.getUniformLocation(program, "mouse_pos");
+    gl.uniform2f(MP, mouse_pos_x, mouse_pos_y);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    window.requestAnimationFrame(render);
+
+  }
+// resize
+// -------------------
+	var addEvent = function(elem, type, eventHandle) {
+		if (elem == null || elem == undefined) return;
+		if ( elem.addEventListener ) {
+			elem.addEventListener( type, eventHandle, false );
+		} else if ( elem.attachEvent ) {
+			elem.attachEvent( "on" + type, eventHandle );
+		} else {
+			elem["on"+type]=eventHandle;
+		}
+	};
+
+	function window_reallign()
+	{
+		win_wid = window.innerWidth;
+		win_hei = window.innerHeight;
+		canvas.width = x_res = win_wid;
+		canvas.height = y_res = win_hei;
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight); // refresh opengl res after resize
+	}
+
+
+  addEvent(window, "resize", window_reallign);
+
+function recursive_offset (aobj) {
+ var currOffset = {
+   x: 0,
+   y: 0
+ } 
+ var newOffset = {
+     x: 0,
+     y: 0
+ }    
+
+ if (aobj !== null) {
+
+   if (aobj.scrollLeft) { 
+     currOffset.x = aobj.scrollLeft;
+   }
+
+   if (aobj.scrollTop) { 
+     currOffset.y = aobj.scrollTop;
+   } 
+
+   if (aobj.offsetLeft) { 
+     currOffset.x -= aobj.offsetLeft;
+   }
+
+   if (aobj.offsetTop) { 
+     currOffset.y -= aobj.offsetTop;
+   }
+
+   if (aobj.parentNode !== undefined) { 
+      newOffset = recursive_offset(aobj.parentNode);   
+   }
+
+   currOffset.x = currOffset.x + newOffset.x;
+   currOffset.y = currOffset.y + newOffset.y; 
+ }
+ return currOffset;
+}
+
+document.onmousemove = handleMouseMove;
+    function handleMouseMove(event) {
+      var eventDoc, doc, body, pageX, pageY;
+      
+      event = event || window.event; // IE-ism
+      
+      // If pageX/Y aren't available and clientX/Y
+      // are, calculate pageX/Y - logic taken from jQuery
+			// Calculate pageX/Y if missing and clientX/Y available
+      if (event.pageX == null && event.clientX != null) {
+        eventDoc = (event.target && event.target.ownerDocument) || document;
+        doc = eventDoc.documentElement;
+        body = eventDoc.body;
+
+        event.pageX = event.clientX +
+          (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+          (doc && doc.clientLeft || body && body.clientLeft || 0);
+        event.pageY = event.clientY +
+          (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+          (doc && doc.clientTop  || body && body.clientTop  || 0 );
+      }
+      var offsetpos = recursive_offset (document.body);
+      mouse_pos_x = (event.pageX-offsetpos.x)/x_res; mouse_pos_y = (event.pageY-offsetpos.y)/y_res;
+      
+    }
+
+// ]]>
+</script>
+</head>
+<body>
+<canvas id="glscreen" style="display: block; position:fixed; width:100%; height: 100%; z-index:-2; left: 0; top: 0; visibility: visible;"></canvas>
+
+	<main>
+	
+		<header>
+			<h1>Crypto Puzzles by Zden</h1>
+      <a href="https://www.instagram.com/p/COz5r-0Ljui/"><img src="cZp-logo.png" border=0></a>
+			<div style="position:absolute;top:55px;right:10px;">
+			<a href="mailto:zden@satori.sk"><img src="ico-em.png" width=24 height=24 hspace=5></a>
+			<a href="https://twitter.com/zd3n"><img src="ico-tw.png" width=24 height=24 hspace=5></a>
+			<a href="https://instagram.com/_zden"><img src="ico-ig.png" width=24 height=24 hspace=5></a>
+			<a href="https://facebook.com/Zd3N7"><img src="ico-fb.png" width=11 height=24 hspace=5></a>
+			</div>
+		</header>
+<!-- If you wish to support making of my puzzles, consider using donation address below. Thank you. -->
+		<section class="prods">
+<!-- CRYPTO LEVEL SFX -->
+    <div class="item">
+      <table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">BTCrypto Puzzle Level HALV</div></div></td></tr></table>
+      <div class="prod prod_halv">
+        <a href="cryptoHALV.png"><div class="prod__bg"></div></a>
+        <div class="prod__bg prod__reflection"></div>
+      </div>
+      <div class="prod_text">
+Level HALV - my new crypto puzzle to celebrate the fourth Bitcoin Halving.<br>This level is way easier than LVL 5.<br>It shouldn't take long until it's solved.<br><p>Public address: <a href="https://blockstream.info/address/1crypto24HCr178iMcKd5iUi5D4rsg1nK">1crypto24HCr178iMcKd5iUi5D4rsg1nK</a>
+      </div>
+    </div>
+<!-- 1BiTCoiN WHiTe PaPeR -->
+    <div class="item">
+      <table><tr><td><img src="ico-btc.png" height=24 hspace=4><br><a href="https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/54355815736028268649754865110138076689311266691503807303544243295159895195649"><img src=nft.gif border=0></a></td><td><div class="prod_title">1BiTCoiN WHiTe PaPeR</div></div></td></tr></table>
+      <div class="prod prod_bwp">
+        <a href="https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq?filename=1BiTCoiN-WHiTe-PaPeR.png"><div class="prod__bg"></div></a>
+        <div class="prod__bg prod__reflection"></div>
+      </div>
+      <div class="prod_text">
+<!-- <b>This release is a Bitcoin Puzzle and an NFT artwork at the same time! The first owner of this NFT will receive a physical signed print.</b><p> -->
+I created this generative artwork by processing the content of Bitcoin White Paper by Satoshi Nakamoto.<br>
+It's at the same time a crypto puzzle that is not visible at first glance.<p>
+Artwork is also notarized on the Bitcoin blockchain by a transaction of 777 Satoshis from the puzzle's address. The SHA-256 fingerprint from this image creates the private key of the notarization wallet.<p>
+The first buyer of this NFT will receive a high-quality, hand-signed, physical print of size 28 x 28 inches (71.12 x 71.12 centimeters).
+<p>Public address: <a href="https://blockstream.info/address/1BiTCoiNsuFnkCFGkv6AGgwWxN31GUwY6W">1BiTCoiNsuFnkCFGkv6AGgwWxN31GUwY6W</a><p>
+Solved in 72 hours. <a href="https://jtobcat.medium.com/solving-zdens-1bitcoin-white-paper-puzzle-6ffa4963e1a2">Solver by the winners.</a></p>
+      </div>
+    </div>
+    <!-- CRYPTO LEVEL SFX -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bitcoin Crypto Puzzle Level SFX</div></div></td></tr></table>
+			<div class="prod prod_sfx">
+				<a href="cryptoSFX.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+BTCrypto Puzzle Level SFX solvable without writing a code, but using software is highly recommended.<br>This time with extra <a href="cryptoSFX_cover.png">cover <img src="cryptoSFX_cover-ico.png" border=0 width=24> art</a>.<p>Public address: <a href="https://blockstream.info/address/1crypto92aYKxdzD6VSAKwpEJnXcA2s9t">1crypto92aYKxdzD6VSAKwpEJnXcA2s9t</a><p>
+Solved in 21 hours.<br><a href="cryptoSFX_solver.png">Solver without using your own code</a>.
+			</div>
+		</div>
+<!-- XIXOIO -->
+		<div class="item">
+			<table><tr><td><img src="ico-eth.png" height=24></td><td><div class="prod_title">XIXOIO ETH puzzle</div></div></td></tr></table>
+			<div class="prod prod_xix">
+				<a href="xixoio_puzzle.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+This image holds 6 ETH crypto puzzle. Released at xixoio.com/cryptopuzzle (no longer online). <a href="https://etherscan.io/address/0x5d663791e869ca70c71e0a5f4cfd707f596265aa">Bounty address</a>.<p>Unsolved for 1 year and then <a href="xixoio_puzzle-solver.png">SOLVER</a> released and bounty transfered in 8 minutes after publishing!
+
+			</div>
+		</div>
+<!-- BTC LVL5 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24 hspace=4><br><img src=fix.gif border=0></td><td><div class="prod_title">Bicoin Crypto Puzzle Level 5</div></td></tr></table>
+			<div class="prod prod_btc5">
+				<a href="crypto5fix.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+<b>The new corrected version including new hints!</b><p>
+This image encodes private key for address <a href="https://blockstream.info/address/1cryptoGeCRiTzVgxBQcKFFjSVydN1GW7">1cryptoGeCRiTzVgxBQcKFFjSVydN1GW7</a>.
+<p><b>UNSOLVED for over 3 years because the original release was uncomplete! Relaunched on 12th of December 2021. My excuses to everyone!</b>
+<p><a href="https://twitter.com/Zd3N/status/1077146640090316800">Past hint.</a><br>(clarity edit: sum of two <strike>consecutive</strike> following rectangles...)
+			</div>
+		</div>
+<!-- CODEX PROTOCOL PUZZLE -->
+		<div class="item">
+			<table><tr><td><img src="ico-eth.png" height=24></td><td><div class="prod_title">Codex Protocol Puzzle</div></td></tr></table>
+			<div class="prod prod_codex1">
+				<a href="CodexPuzzle.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+This image encodes the private key for <a href="https://etherscan.io/address/0x6b2560b34c7469c561a8fce581c88bfb8cce73b2">this address</a>.<p>
+<a href="CodexPuzzle-hint.png">Hint #1</a> & <a href="CodexPuzzle-hint2.png">Hint#2</a> released.<br><a href="https://twitter.com/RRagon2/status/1006938941919039489">Solved in 20 days</a>.<br>
+<a href="https://steemit.com/cryptopuzzle/@zden/codex-puzzle-1-codexokryphodron">My blog post how the puzzle works.</a>
+			</div>
+		</div>
+<!-- CRYPTO DEMOBIT 2018 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bitcoin Demobit 2018 Special</div></td></tr></table>
+			<div class="prod prod_db18">
+				<a href="crypto_db18.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Bicoin Crypto Puzzle <a href="https://demobit.party">Demobit</a> 2018 Special<p>
+This image encodes private key for address <a href="https://blockstream.info/address/1cryptotnptVK1ZbpZFyEqcR5EVp5hjfk">1cryptotnptVK1ZbpZFyEqcR5EVp5hjfk</a>.<p>
+<a href="https://twitter.com/Zd3N/status/966275899757879298">Hint #1</a> released.<br>Solved in 51 days (<a href="https://twitter.com/RRagon2/status/977993434169528320">tweet by solver</a> [removed user]) - <a href="https://twitter.com/Zd3N/status/977976777820827648">tweet by me</a>.<p>
+			</div>
+		</div>
+<!-- CRYPTO XMAS17 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Crypto Puzzle Level XM17</div></td></tr></table>
+			<div class="prod prod_xm17">
+				<a href="cryptoxm17.gif"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+This animation encodes private key for address <a href="https://blockstream.info/address/1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g">1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g</a>.<p>
+Solved in 22 hours (<a href="cryptoxm17solver.png">solver</a>).<p>
+			</div>
+		</div>
+<!-- HCPP17 MONERO -->
+		<div class="item">
+			<table><tr><td><img src="ico-xmr.png" height=24></td><td><div class="prod_title">HCPP17 Monero Cryptopuzzle</div></td></tr></table>
+			<div class="prod prod_hcpp17">
+				<a href="hcpp17-cryptopuzzle.jpg"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Reveal the XMR seed and gain the initial reward 13.37 XMR.<p>
+<a href="https://twitter.com/Zd3N/status/925289099644293121">hint tweet</a><p>
+Released at <a href="https://liberate.hcpp.cz/">HCPP17</a> and solved in 3 <a href="https://twitter.com/RRagon2/status/949943206820634624">months</a>.<br><a href="hcpp17-solver.jpg">Read solution</a> written by the winner (posted on removed twitter account).
+			</div>
+		</div>
+<!-- BTC LVL4 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Crypto Puzzle Level 4</div></td></tr></table>
+			<div class="prod prod_btc4">
+				<a href="crypto4.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+This image encodes private key for address <a href="https://blockstream.info/address/1cryptoRMRnj7Q9fgToxTRvejLnx3QRPq">1cryptoRMRnj7Q9fgToxTRvejLnx3QRPq</a>.<p>
+Level 4 solved in 52 hours.<br><a href="https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden">Solution article by the winner.</a>
+			</div>
+		</div>
+<!-- LITECOIN SEGWIT -->
+		<div class="item">
+			<table><tr><td><img src="ico-ltc.png" height=24><br><a href="https://bit.ly/LTCsegwitNFT"><img src=nft.gif border=0></a></td><td><div class="prod_title">Litecoin SegWit Activation Puzzle</div></td></tr></table>
+			<div class="prod prod_ltc">
+				<a href="LitecoinSegWit.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Find 256 bits of the Private Key in this image.<br>Convert to WIF and profit!<p>
+Public address: <a href="https://litecoinblockexplorer.net/address/LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS">LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS</a><p>
+Hints <a href="https://crypto.haluska.sk/LitecoinSegWit_hint1.svg">#1</a>, <a href="https://crypto.haluska.sk/LitecoinSegWit_hint2.svg">#2</a></a> & <a href="https://crypto.haluska.sk/LitecoinSegWit_hint3.svg">#3 <img src="LitecoinSegWit_hint3.gif" width=24 border=0></a></a> released.<br>
+Solved in 2 weeks.<br><a href="https://bit.ly/LTCpuzzle"><img src="ltc_encryption.gif" border=0 width=24> Encryption animation</a> with algo & priv key.<br>
+<a href="https://github.com/Cybourgeoisie/LTCStegCode"><img src="ltcpriv.gif"> Solver code</a> + <a href="https://steemit.com/litecoin/@mys/remember-this-210-ltc-worth-puzzle-posted-by-charlie-lee-we-have-solved-it-detail-explanation-inside-how-we-did-that">story</a> by the winner(s)!<p>
+<a href="LitecoinSegWit.png">Raw puzzle design in public domain</a>.
+			</div>
+		</div>
+<!-- DECRED WHEELS PUZZLE -->
+		<div class="item">
+			<table><tr><td><img src="ico-dcr.png" height=24></td><td><div class="prod_title">Decred's Autonomy Puzzle</div></td></tr></table>
+			<div class="prod prod_wheels">
+				<a href="gate_full.jpg"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Data for Decred's Autonomy "wheels" Puzzle<p>
+<a href="gate_full.jpg"><img src="wheels_puzzle.png" border=0 width=24> High quality render</a>. Originally launched on decred.org/autonomy_puzzle website (no longer online).<br>
+<br><a href="wheels_puzzle-bitmap.png"><img src="wheels_puzzle.gif" border=0 width=24></a>You can read about puzzle mechanics from these <a href="wheels-puzzle.zip">"blueprints"</a>.
+			</div>
+		</div>
+<!-- DECRED JANUS -->
+		<div class="item">
+			<table><tr><td><img src="ico-dcr.png" height=24></td><td><div class="prod_title">Decred's Janus puzzle</div></td></tr></table>
+			<div class="prod prod_janus">
+				<a href="Janussteg.jpg"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Originally launched on decreg.org/januspuzzle (no longer online).<br>
+Find DCR <a href="https://mainnet.decred.org/address/DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8">wallet</a> seed.<br>This puzzle in SVG is hiding the seed: <a href="decred_tree.svg"><img src="decred_tree_ico.gif" border=0 width=24></a><p>
+(After a week of beeing unsolved)<br>
+Here is the hint <a href="decred_tree_hint.svg"><img src="decred_tree_hint_ico.gif" border=0 width=24></a> to help out with solving.<br>
+<br>Solved in 10 days and 6 hours.<br>Look at <a href="tree_puzzle-encoding_scheme.png">tree encoding scheme</a>.
+			</div>
+		</div>
+<!-- BTC NETHEMBA -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Puzzle for Nethemba</div></td></tr></table>
+			<div class="prod prod_nethemba">
+				<a href="crypto_nethemba.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Bicoin Crypto Puzzle - DefCon 24 Special with Nethemba<p>
+As usual, following image encodes private key. Premium bounty provided by Nethemba and released at DefCon 24.<p>Public address is <a href="https://blockstream.info/address/1cryptoP5yMdKcz1bjzUqnbs3LsasVRX6">1cryptoP5yMdKcz1bjzUqnbs3LsasVRX6</a><p>
+If you want to support my free art, now you can. Use voucher<br> and I'll receive fair cut from the deal.<p>
+Solved in 5 days and 3 hours.<br>Here is the <a href="crypto_nethemba_solver.png">solver</a>.
+			</div>
+		</div>
+<!-- BTC LVL3 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Crypto Puzzle Level 3</div></td></tr></table>
+			<div class="prod prod_btc3">
+				<a href="crypto3.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+This image encodes private key for address <a href="https://blockstream.info/address/1cryptoJzomVVJUSys8Qv1gKPCXFoZy1U">1cryptoJzomVVJUSys8Qv1gKPCXFoZy1U</a>.
+<p>Level 3 solved in 38 hours.<br><a href="crypto3solver.png">Look at Solver.</a>
+			</div>
+		</div>
+<!-- BTC LVL2 -->
+		<div class="item">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Crypto Puzzle Level 2</div></td></tr></table>
+			<div class="prod prod_btc2">
+				<a href="crypto2.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+Find private key in this image.<p>
+Public address: <a href="https://blockstream.info/address/1cryptoTuax4qeedzVC35eYf4c16v4reJ">1cryptoTuax4qeedzVC35eYf4c16v4reJ</a><p>
+Level 2 solved after 29 hours.<br><a href="crypto2solver.png">Look at Solver.</a>
+			</div>
+		</div>
+<!-- BTC LVL1 -->
+		<div class="item_last">
+			<table><tr><td><img src="ico-btc.png" height=24></td><td><div class="prod_title">Bicoin Crypto Puzzle Level 1</div></td></tr></table>
+			<div class="prod prod_btc1">
+				<a href="crypto1.png"><div class="prod__bg"></div></a>
+				<div class="prod__bg prod__reflection"></div>
+			</div>
+			<div class="prod_text">
+			This is the first level of Bitcoin Crypto Puzzle.<p>
+			The image encodes private key with the bounty for the first solver.<br>I consider this level as simple for the start.<br>
+So let's play the game, wipe it and let me create another one.<br>Public address for Level 1: <a href="https://blockstream.info/address/1cryptommoqPHVNHuxVQG3bzujnRJYB1D">1cryptommoqPHVNHuxVQG3bzujnRJYB1D</a><br>
+Solutions will be posted here after accomplishing.<p>
+Level 1 solved after 6 hours.<br><a href="crypto1solver.png">Look at Solver.</a>
+			</div>
+		</div>
+<!-- DUMMY -->
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+		<div class="item_dummy">
+		</div>
+<!-- -->
+		</section>
+	</main>
+<div class=footer>
+<footer>
+created by <a href="https://zd3n.com">Zden</a> from <a href="https://satori.digital">satori.digital</a> - hosted on net.art project <a href="https://haluska.sk">Haluska</a> webedelic - <img src="ico-btc.png"height=12> donations <a href="https://blockstream.info/address/1BTC4ARTieV3qDbxZK51it8KJ5mGQBYpXD">1BTC4ARTieV3qDbxZK51it8KJ5mGQBYpXD</a> - <a href="index_old.html">old&nbsp;version</a>
+</footer>
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40773143-2', 'haluska.sk');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
