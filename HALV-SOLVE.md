@@ -20,16 +20,17 @@ Its structure is now settled at two levels:
 
 * **The amplitude ladder is an 18-rung `{3·2^k} ∪ {2^k}` set** whose steps strictly
   alternate ×2/3 and ×3/4 — two rungs per halving. This is the "HALV" theme.
-* **The waveform is 8 × 96-px halving blocks**, block `b` having scale `128/2^b` and using
-  only levels `{s, 2s, 3s}` — i.e. `q ∈ {0,1,2,3}` with `q=0` the axis. **Confirmed**
-  (§4.0), and its closure reproduces the ladder exactly, so the two measurements are
-  the same fact seen twice.
+* **The waveform divides into 8 × 96-px halving blocks**, with the confidently measured
+  flat plateau levels in block `b` drawn from `{s, 2s, 3s}`, where `s=128/2^b`; the axis
+  supplies `q=0`. The level family is **confirmed** (§4.0), and its closure reproduces the
+  ladder exactly. Continuous ramp points interpolate between these plateau levels.
 
-What is **not** established is the data clock. The tempting inference
-`768 = 8 × 96 = 128 × 6 → 128 quaternary states = 256 bits` is **refuted** (§4.0b):
-plateau lengths are 1, 2, 3, 4, 5, 7 with `0/36` divisible by 6, and the signal is a
-continuous ramp-and-plateau (slope exactly ±1 px/px, vertices at every integer x) — not a
-step function a quantiser could lock onto.
+What is **not** established is the data clock. The inference
+`768 = 8 × 96 = 128 × 6 → 128 quaternary states = 256 bits` is **not yet supported**:
+plateau lengths are 1, 2, 3, 4, 5, 7, and the signal is continuous rather than a 6-px
+step function. These observations reject a uniform 6-px step/plateau interpretation; they
+do **not** by themselves reject a 6-px logical clock whose states are joined by a continuous
+renderer. That model remains open until a target-blind reconstruction test adjudicates it.
 
 The capacity accounting in prior work (≈118 bits) is an artefact of a wrong reading; the true
 channel count is larger and is enumerated in §6.
@@ -72,19 +73,19 @@ So the stroke is exactly **2 px** wide, centred on integer rows, with a soft edg
 **2.3 Extents.** Waveform occupies `x = 90 … 858` (769 columns) and reaches
 `y = 89 … 861`, i.e. `v_max = 384` exactly. The 475 axis is the exact centre of the canvas.
 
-**2.4 It is a single-valued polyline with a vertex at every integer x.**
+**2.4 It is a single-valued polyline evaluated at every integer x.**
 After masking the logo and the bottom text, only **3 columns (x = 90…92) of the 772**
 contain more than one stroke crossing. Everywhere else `y(x)` is a function.
 `y(x)` is piecewise linear, and `v_mid(x) = 475 − y(x+0.5)` (the intensity-weighted
 centroid of the folded stroke crossing) is **unbiased** — this is the single most reliable
-per-column observable. Its first difference is **exactly 1.000** on the ramps
-(e.g. x = 723→725 and x = 728→730), with a small, constant +0.28 offset.
+per-column observable in the resolved tail. Its first difference is **about 1.000** on
+the cited ramps (e.g. x = 723→725 and x = 728→730), with a small, constant +0.28 offset.
 
-> **This overturns the previous repo.** `halv_measure.py`/`halv_decode.py` assumed a sample
-> grid of `x = 92 + 3i` (256 samples). That is wrong: consecutive integer columns carry
-> consecutive integer vertex values, and the plateau lengths are 1–19 columns, not multiples
-> of 3. The 3-px "grid" was a coincidence of a few plateau positions. The 768 = 3×256 px
-> extent is *not* a 256-sample grid.
+> **This overturns the previous repo's direct extractor.** `halv_measure.py`/`halv_decode.py`
+> treated values sampled at `x = 92 + 3i` as the complete signal. That direct read is not
+> supported: plateau lengths are 1–19 columns, not multiples of 3, and the raster contains
+> intervening geometry. This does not rule out a 3-px physical lattice inside a generator;
+> it rules out treating those 256 visible samples as an already-recovered payload stream.
 
 ---
 
@@ -114,7 +115,7 @@ is now nailed down and *excluded* as a data channel.)
 
 ---
 
-## 4. CONFIRMED — the block structure, and the clock is *not* 6 px
+## 4. CONFIRMED — the block structure; the data clock remains open
 
 Reproduce with `python3 halv/blocks.py`. This is the highest-value result in the file.
 
@@ -136,9 +137,10 @@ uses its own `{s, 2s, 3s}`:
   7  762..857      1.0   [1, 2, 3]          [1, 2, 3]   OK
 ```
 
-**No block contains a level outside its own triple.** With `scale_b = 128/2^b` and
-amplitude `q · scale_b`, that is exactly `q ∈ {0,1,2,3}` with `q = 0` meaning the
-axis at y = 475.
+**No confidently detected flat plateau lies outside its block's triple.** With
+`scale_b = 128/2^b` and plateau amplitude `q · scale_b`, the observed plateau states are
+`q ∈ {1,2,3}`; `q = 0` is the axis at y = 475. The ramp vertices between plateaus are not
+constrained to these four levels.
 
 And the closure lands precisely on the independently measured ladder:
 
@@ -152,25 +154,27 @@ Two independent routes — a pixel-level ladder measurement, and a block-partiti
 test — converge on the same closed set. This is the real structural content of the
 puzzle and it is settled.
 
-### 4.0b …but there is **no 6-px symbol clock**  **[REFUTED]**
+### 4.0b …but there is **no evidence for a 6-px step/plateau clock**  **[LIMITED]**
 
 The natural next inference — 768 px = 8 blocks × 96 px = 128 symbols × 6 px, giving
 128 quaternary states = exactly 256 bits — does **not** survive the geometry.
 
 * **Plateau lengths are not multiples of 6.** They are 1, 2, 3, 4, 5, 7:
   `0/36` plateaus have length ≡ 0 mod 6 (uniform expectation 17 %), and only
-  `5/36` are ≡ 0 mod 3 (expectation 33 %). A 6-px clock forces multiples of 6.
+  `5/36` are ≡ 0 mod 3 (expectation 33 %). This rejects the claim that each visible
+  plateau is itself a six-pixel cell.
 * **The signal is not a step function.** It is a continuous ramp-and-plateau.
   Measured `v_mid` first differences across the x = 723…730 ramps:
   `1.002, 0.973, 0.231, −0.002, −0.262, −0.993, −0.993` — the trace moves one pixel
-  of amplitude per column, with vertices at every integer x. A 6-px quantiser has
-  no step edge to lock onto; it aliases.
+  of amplitude per column, with vertices at every integer x. This rejects a 6-px
+  piecewise-constant renderer, but not a logical clock joined by continuous interpolation.
 * **Event counts per block are not 16, 32 or 96.** Slope-reversal counts are
   12, 15, 23, 18, 19, 18, 27, 30 — an average event pitch of 5–11 px, no periodicity.
 
-`768 = 8 × 96` and `768/6 = 128` are true arithmetic, but the span is simply
-`3 × 256`; the factorisation is not evidence of a 128-symbol clock. §2.4 already
-established the vertex lattice is **1 px**, so neither 3 nor 6 is the vertex clock.
+`768 = 8 × 96` and `768/6 = 128` are true arithmetic, but the factorisation alone is not
+evidence for a 128-symbol clock. §2.4 establishes vertices at integer x; that describes
+the rendered curve, not the rate at which latent symbols are defined. A 3-px physical
+lattice and a 6-px symbol clock remain hypotheses for forward-rendering tests.
 
 ### 4.0c The supplied `solve_halv_q4.py` negative is **vacuous**
 
@@ -255,13 +259,15 @@ image. Do not treat it as a dead end.
 | stego / chunk / trailing data | ✗ | §1, certified |
 | file-hash → privkey | ✗ | §1, certified |
 | sign of the waveform as a channel | ✗ | §2.1 mirror-exact |
-| 3-px sample grid, 256 samples | ✗ | §2.4 |
+| direct 3-px amplitude read as 256 payload symbols | ✗ | §2.4; intervening waveform geometry is omitted |
+| 3-px physical lattice inside a generator | ? | OPEN — not adjudicated by plateau widths |
 | amplitude as digits (3-smooth snap, 3^n/2^n ladder) | ✗ | §3, ladder is theme-determined |
 | circle/diamond as an independent bit | ✗ | §4.4, it *is* plateau length |
 | "the image only has ~118 bits" | ✗ | §4.4 |
 | brain-wallet phrases from the theme (≈110 tried) | ✗ | prior work, plausible |
 | 500 M-derivation WIF-wildcard sweep | ✗ | prior work, but **uncertified comparator** — re-run with `halv/oracle.py` before trusting |
-| 6-px symbol clock / 128 quaternary states | ✗ | §4.0b — 0/36 plateaus divisible by 6; signal is a ramp, not a step function |
+| 6-px piecewise-constant / plateau clock | ✗ | §4.0b — visible plateaus are not 6-px cells and the signal is continuous |
+| 6-px logical clock with continuous renderer | ? | OPEN — plateau widths do not test it; direct centroid prototype in §10 is inconclusive |
 | the supplied `solve_halv_q4.py` 384-candidate negative | ✗ *vacuous* | §4.0c — E1/E2/E3; the extractor is degenerate, so it refutes nothing |
 
 ---
@@ -286,17 +292,20 @@ per-element digit count over-counts, and 256 bits land inside one channel.
 ## 7. Tree route to continue (ordered by expected yield)
 
 ```
-7.0  [PREREQUISITE, cheap] Certify the oracle
-     halv/oracle.py is self-certified (privkey 1). Re-run the prior 500 M sweep with it,
-     or discard that negative. Cost: minutes. Gate for trusting any negative below.
+7.0  [PARTLY DONE] Certify the oracle
+     The local comparator now checks compressed and uncompressed P2PKH and passes the
+     private-key-1 controls. The prior 500 M sweep used an uncertified comparator; rerun
+     only if its candidate family becomes relevant.
 
 7.0b [NEW, HIGHEST] DERIVE the clock, do not assume it
-     §4.0 settled the 8-block x q-in-{0,1,2,3} structure; §4.0b killed the 6-px clock.
-     The clock is the remaining unknown and it is cheap to derive. Two framings
+     §4.0 settled the 8-block x q-in-{0,1,2,3} structure; §4.0b rejects only a
+     piecewise-constant 6-px clock. The latent clock remains unknown. Three framings
      the block structure keeps alive, to be discriminated by measurement:
        (a) 256 bits at 3 px/bit   -> 96/3 = 32 bits per block x 8 blocks = 256 bits
        (b) q as a 3-valued level index per symbol (1.585 bit/symbol, not 2)
-     Decide by counting real symbols per block, not by asserting a grid.
+       (c) 128 latent Q4 states at 6-px spacing with a continuous global renderer
+     Decide by target-blind reconstruction and held-out-block prediction, not plateau
+     divisibility or address matching.
      This item is a prerequisite for 7.1 and for any Q4-DP.
 
 7.1  [HIGHEST] Reconstruct the full 769-vertex signal exactly
@@ -364,13 +373,15 @@ per-element digit count over-counts, and 256 bits land inside one channel.
 
 ```
 halv/measure.py     re-derives every CONFIRMED fact above; prints F1..F5   (run this first)
-halv/blocks.py      T1 8x96 block structure CONFIRMED / T2 6-px clock REFUTED / T3 ramp not step
+halv/blocks.py      T1 8x96 blocks CONFIRMED / T2 6-px plateau-cell model REFUTED / continuous clock OPEN
 halv/q4eval.py      audit of the external solve_halv_q4.py: why its negative is vacuous (E1/E2/E3)
 halv/model.py       forward renderer for the 2-px stroked, mirrored polyline
 halv/viterbi.py     route item 7.1: Viterbi over integer vertex values
-halv/oracle.py      certified secp256k1 -> P2PKH comparator  (privkey 1 self-test)
+halv/oracle.py      secp256k1 -> compressed/uncompressed P2PKH comparator (key-1 controls)
+halv/direct_q4.py   target-blind test of direct 6-px amplitude sampling
 halv/plateaus.npy   the 41 high-confidence plateaus  (level, x0, x1, length)
 halv/vit_700_860.npy  first Viterbi pass over the resolvable tail (see caveat below)
+halv/vit_568_858.npy  wider tail Viterbi pass (see §10.2 caveat)
 HALV-SOLVE.md       this file
 ```
 
@@ -392,13 +403,102 @@ HALV-SOLVE.md       this file
 
 Reproduction: `python3 halv/measure.py` (needs numpy, scipy, pillow).
 
+---
+
 ## 9. Corrections to earlier work in this repo
 
 | earlier claim (`halv_*.py`, `attempts/*`) | correction |
 |---|---|
-| sample grid `x = 92 + 3i`, 256 samples | ✗ vertices are at **every** integer x; the trace is single-valued in 769/772 columns |
+| direct sample grid `x = 92 + 3i` as the full payload | ✗ intervening waveform geometry is omitted; a 3-px physical lattice remains open |
 | "mirror symmetry ⇒ signal is rectified" | ✓ correct, now certified to 0.03 grey levels (was asserted, not measured) |
 | stroke width 1.4784 | ✗ **1.996** |
 | `3 * 384 * 2^-a * 3^-b` snap, `D2.npy` mass identity | ✗ the ladder is `{3·2^k} ∪ {2^k}`, 18 rungs, exactly alternating ×2/3, ×3/4 |
-| beam search over ±1 step on a 3-px DP | ✗ the step is exactly **±1 per column**; the DP was on the wrong grid, which is why the fit was weak |
+| beam search over ±1 step on a 3-px DP | ✗ it used a biased measurement and did not model the continuous renderer |
 | "need a 3-smooth snap" | ✓ the shape is real, but it is the *theme* ladder and carries no key bits |
+
+---
+
+## 10. New discriminating tests (2026-09-28)
+
+### 10.1 Direct six-pixel centroid sampling — NO MATCH, EXPLORATORY
+
+`python3 halv/direct_q4.py` samples the upper-half intensity centroid at all six
+possible phases `x = 90 + phase + 6i`, normalizes each point by its 96-px block scale,
+and rounds to `q ∈ {0,1,2,3}`. It checks every bijection from those four states to two
+bits, forward/reverse symbol order, pair bit order, global bit reversal, and byte order.
+
+| phase | q=0 | q=1 | q=2 | q=3 |
+|---:|---:|---:|---:|---:|
+| 0 | 21 | 67 | 35 | 5 |
+| 1 | 22 | 73 | 24 | 9 |
+| 2 | 31 | 46 | 44 | 7 |
+| 3 | 22 | 66 | 36 | 4 |
+| 4 | 27 | 65 | 28 | 8 |
+| 5 | 36 | 38 | 45 | 9 |
+
+The centroid proxy gives only 4–9 `q=3` samples out of 128 for each phase. That is
+imbalanced against a uniform-state baseline, but it is not a rejection by itself: the key
+need not be uniform, and the centroid is not a certified centerline measurement throughout
+the high-amplitude region. Across all phases and conventions, 288 distinct valid 256-bit
+scalars were checked against the exact target HASH160 in both compressed and uncompressed
+forms; none matched. The script checks both known key-1 addresses before searching.
+
+**Interpretation:** no key was recovered from this direct centroid extraction. Because the
+centroid proxy can be biased on slopes and overlapping strokes, this is not a decisive
+rejection of exact direct sampling, and it does not test latent Q4 states recovered through
+a continuous renderer. The state imbalance is a clue to improve geometric measurement,
+not evidence for or against a key stream by itself.
+
+### 10.2 Tail reconstruction — useful, not certified
+
+`python3 halv/viterbi.py 568 858` produces `halv/vit_568_858.npy`, with total L1 909 over
+291 columns × 774 rows (about 1.03 grey levels/column). The path contains repeated
+zero-separated excursions in the final three blocks, but the renderer's ramp residual
+remains comparable to local candidate separation. Do not decode that vector as payload.
+It is a saved input for improving and comparing ramp kernels.
+
+### 10.3 Oracle audit — comparator corrected
+
+Reviewing `halv/oracle.py` while validating the candidate sweep showed that `check(k)` only
+derived the uncompressed public key twice; it never checked the compressed address. The
+function now tests both serializations, and its command-line controls verify private key 1
+against `1EHNa6Q4Jz2uvNExL497mE43ikXhwF6kZm` (uncompressed) and
+`1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH` (compressed). This does not alter the direct-Q4 result
+above, which checked both formats, but it means earlier negative searches using the old
+`check()` must not be treated as ruling out compressed-key candidates.
+
+### 10.4 Updated status
+
+The best live structural route is still an 8-block normalized four-state plateau alphabet. The
+new test finds no candidate under the simplest centroid-sample extraction. The next high-value test is
+to recover latent states with one global forward renderer, fit on early blocks and scored
+on held-out later blocks, with phase and renderer family selected without the address.
+Only a unique low-residual reconstruction should feed run lengths, transition magnitudes,
+or a 128-state Q4 bit map.
+
+## 11. Continuation tree
+
+```text
+HALV image
+  ├─ File-level stego/hash routes ─────────────────────────── CLOSED / negative
+  └─ 769-column rectified waveform
+       ├─ 8 × 96 halving blocks; normalized q={0,1,2,3} ─── CONFIRMED structure
+       ├─ Direct x=90+phase+6i centroid samples ──────────── NO MATCH (288 keys; proxy only)
+       └─ Recover the latent generator target-blind
+            ├─ Fit exact sloped-stroke raster kernel
+            ├─ Reconstruct centerline / vertex sequence
+            ├─ Compare 3-px lattice, 6-px continuous Q4,
+            │  and event/run-length models on held-out blocks
+            └─ Require one global phase/model and low residual
+                 ├─ If unique: freeze latent states and exact geometry
+                 │    ├─ decode state / transition / plateau / gap streams
+                 │    ├─ test only structurally justified bit/nibble conventions
+                 │    └─ certify scalar against compressed and uncompressed P2PKH
+                 └─ If no winner: revise raster generator, not the key mapping
+```
+
+**Current confirmed:** rectification, 2-px stroke profile, 18-rung halving ladder,
+8×96 block scales, and three normalized nonzero plateau levels plus the zero axis. **Current negative:**
+the old direct 3-px amplitude stream and uniform 6-px step cells. **Exploratory no-match:**
+direct 6-px centroid sampling. **Still open:** physical 3-px lattice, latent 6-px continuous Q4 clock, the exact
+vertex path, run-length payload, 256-bit extraction, and the private key.
