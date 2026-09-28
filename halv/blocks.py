@@ -7,8 +7,8 @@ T1  CONFIRMED : the waveform is 8 x 96-px halving blocks; block b has scale
                 (equivalently q in {0,1,2,3}, q=0 == the axis y=475).
                 This closes exactly onto the 18-rung ladder {3*2^k} U {2^k}.
 
-T2  REFUTED   : there is no uniform 6-px symbol clock.  A 6-px clock forces
-                plateau lengths to be multiples of 6.  They are not.
+T2  LIMITED   : plateau lengths do not support a 6-px step/plateau clock.
+                This does not test a latent 6-px clock with continuous rendering.
 
 T3  REFUTED   : the signal is not a step function.  It is a continuous
                 ramp-and-plateau, vertices at every integer x, ramp slope
@@ -82,7 +82,7 @@ def t1_block_structure(S, thr=0.985):
 def t2_six_px_clock(S, thr=0.97):
     print()
     print('=' * 74)
-    print('T2  is there a uniform 6-px symbol clock?')
+    print('T2  do plateau widths support a 6-px step/plateau clock?')
     print('=' * 74)
     from collections import Counter
     hist = Counter()
@@ -111,7 +111,8 @@ def t2_six_px_clock(S, thr=0.97):
     print('  length %% 3 == 0          : %d/%d  (%.0f%%)   uniform expectation 33%%'
           % (m3, tot, 100 * m3 / tot))
     print()
-    print('  T2 VERDICT: REFUTED - no 6-px (or 3-px) grid in the plateau lengths.')
+    print('  T2 VERDICT: REFUTED - visible plateaus are not 6-px cells.')
+    print('     This does NOT refute a 6-px symbol clock with continuous interpolation.')
     return m6 == 0
 
 

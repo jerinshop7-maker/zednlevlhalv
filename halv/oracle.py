@@ -37,4 +37,13 @@ def addr(k,comp=False):
     return b58c(b'\x00'+hash160(pub))
 def check(k):
     if not (0<k<N): return False
-    return addr(k)==TARGET or hash160((b'\x04'+mul(k)[0].to_bytes(32,'big')+mul(k)[1].to_bytes(32,'big'))).hex()==H160
+    # The target address may have been generated from either pubkey encoding.
+    Q=mul(k)
+    pub_u=b'\x04'+Q[0].to_bytes(32,'big')+Q[1].to_bytes(32,'big')
+    return (b58c(b'\x00'+hash160(pub_u))==TARGET
+            or b58c(b'\x00'+hash160(ser(Q)))==TARGET)
+
+if __name__=='__main__':
+    assert addr(1,comp=False)=='1EHNa6Q4Jz2uvNExL497mE43ikXhwF6kZm'
+    assert addr(1,comp=True)=='1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH'
+    print('oracle controls passed (private key 1, compressed and uncompressed)')
