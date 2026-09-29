@@ -6,18 +6,20 @@ That script assumes a 6-px symbol clock (128 quaternary states, 2 bits each).
 It runs to completion and reports 384 candidates, 0 matches.  That negative is
 VACUOUS, for three independently checkable reasons:
 
-  E1  the recovered q cannot represent the data: with scale s the model tops
-      out at 3s, but block 0 measures a peak of 379 px against a model max of
-      256 (q=3 never occurs in block 0)
-  E2  the recovered q is not payload-like: a quaternary encoding of 256 bits of
-      key material is uniform (~32 per value); this is 54% q==1 and 1.6% q==3
+  E1  this recovered q sequence fails to represent the measured peak: it only
+      reaches q=2 in block 0, so its rendered max is 256 px versus a measured
+      trace max near 378 px. The model family permits q=3 and a 384-px ceiling.
+  E2  its q histogram is 54% q==1 and 1.6% q==3. This is descriptive only;
+      imbalance alone does not reject a key encoding.
   E3  the model barely beats a trivial baseline: rms 39.1 px versus 43.2 px for
       "one constant per block" and 82.8 px for the axis
 
-Root cause, visible in the code: `amplitude_trace` keeps only pixels >= 20% of
-the column max, and in blocks 0-2 each column contains several stroke crossings,
-so the centroid is meaningless; `recover_q` then takes the median of 6 columns of
-what is a ramp, which is not a symbol value.
+Known extraction limitation: `recover_q` takes the median of six columns of a
+continuous ramp, which is not a justified state estimator. The external
+`amplitude_trace` source is not present here, so the claim that blocks 0-2 have
+multiple upper-half crossings is unverified. A full image column contains the
+mirrored upper/lower strokes; within the upper half the measured centerline is
+single-valued except at the origin fringe x=90..92.
 
 Run:  python3 halv/q4eval.py
 """
@@ -55,16 +57,16 @@ def main():
     d = v[idx] - pred[idx]
 
     print('=' * 74)
-    print('E1  can the q4 model even represent the waveform it claims to describe?')
+    print('E1  does this recovered q sequence reproduce the measured scale?')
     print('=' * 74)
-    print(' blk   scale   model max (3s)   measured max   verdict')
+    print(' blk   scale   recovered-model max   measured max   verdict')
     for b in range(8):
         lo = X0 + 96 * b; hi = lo + 95
         j = np.arange(lo, hi + 1)
         s = 128 >> b
         mm, mv = pred[j].max(), v[j].max()
         print('  %d   %5d   %8d        %8d        %s'
-              % (b, s, mm, mv, 'OK' if mv <= 3 * s + 1 else 'MODEL TOO SMALL'))
+              % (b, s, mm, mv, 'OK' if mv <= mm + 1 else 'RECOVERED q TOO SMALL'))
     print()
 
     print('=' * 74)
@@ -91,14 +93,16 @@ def main():
     print('  rms vs the 6-px q4 model          : %6.2f px' % rmsq)
     print('  correlation measured vs model     : %.4f' % np.corrcoef(v[idx], pred[idx])[0, 1])
     print()
-    print('  The q4 model beats "a constant per block" by %.1f px only.' % (rmsc - rmsq))
+    print('  This sampled q4 rendering beats "a constant per block" by %.1f px only.' % (rmsc - rmsq))
     print('  A working decoding model drives this toward 0.')
     print()
     print('=' * 74)
     print('CONCLUSION: the 384-candidate negative is vacuous. It does not refute')
-    print('the q4 idea; it shows the extractor returns a degenerate sequence.')
-    print('The 8-block x q-in-{0,1,2,3} STRUCTURE is independently confirmed')
-    print('(see halv/blocks.py T1); the 6-px CLOCK is refuted (T2/T3).')
+    print('the latent q4 idea; this six-pixel median extractor returns a poor')
+    print('reconstruction and cannot test that idea as written.')
+    print('The 8-block plateau alphabet q-in-{1,2,3} plus axis q=0 is confirmed')
+    print('(see halv/blocks.py T1); the 6-px step clock is rejected, while a')
+    print('continuous-renderer symbol clock remains open.')
     print('=' * 74)
     return 0
 
