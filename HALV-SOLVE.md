@@ -73,9 +73,11 @@ So the stroke is exactly **2 px** wide, centred on integer rows, with a soft edg
 **2.3 Extents.** Waveform occupies `x = 90 … 858` (769 columns) and reaches
 `y = 89 … 861`, i.e. `v_max = 384` exactly. The 475 axis is the exact centre of the canvas.
 
-**2.4 It is a single-valued polyline evaluated at every integer x.**
-After masking the logo and the bottom text, only **3 columns (x = 90…92) of the 772**
-contain more than one stroke crossing. Everywhere else `y(x)` is a function.
+**2.4 The upper-half waveform is a single-valued polyline evaluated at every integer x.**
+After masking the logo and bottom text, only **3 columns (x = 90…92) of the 772**
+contain more than one upper-half stroke crossing. The full image also has the deliberate
+mirror trace below y=475, so a full-height column naturally contains both copies.
+Everywhere else in the upper half, `y(x)` is a function.
 `y(x)` is piecewise linear, and `v_mid(x) = 475 − y(x+0.5)` (the intensity-weighted
 centroid of the folded stroke crossing) is **unbiased** — this is the single most reliable
 per-column observable in the resolved tail. Its first difference is **about 1.000** on
@@ -108,10 +110,12 @@ i.e. exactly **`{3·2^k} ∪ {2^k}`, k = 0…8**. Consecutive ratios:
 `log2(384) = 7.585`. This is a *logarithmic* halving ladder: the two rungs of each halving
 are `2^k` and `3·2^k`.
 
-*Why this matters:* the ladder is fully determined by the theme, so it carries **no
-information**. Any reading that uses the amplitude as a digit is reading the theme, not the
-key. (The previous repo's `v_3smooth.npy` / "3-smooth snap" was groping at exactly this and
-is now nailed down and *excluded* as a data channel.)
+*What this establishes:* the **set of allowed plateau amplitudes** is theme-structured.
+That does not establish that the time-ordered choice of rung carries no information. The
+sorted ladder itself is not a payload, but a sequence of rung indices remains a live data
+channel and must be tested after the centerline and clock are recovered. The previous
+repo's `v_3smooth.npy` / "3-smooth snap" identifies a plausible alphabet; its direct
+amplitude samples are not a certified symbol stream.
 
 ---
 
@@ -178,21 +182,23 @@ lattice and a 6-px symbol clock remain hypotheses for forward-rendering tests.
 
 ### 4.0c The supplied `solve_halv_q4.py` negative is **vacuous**
 
-An external solver implementing the 6-px / 128-quaternary-state model was run
-(`halv/q4eval.py` reproduces the audit). It completes and reports 384 candidates,
-0 matches — but the negative carries no information, for three checkable reasons:
+An external solver implementing a direct 6-px / 128-quaternary-state model was run
+(`halv/q4eval.py` audits the saved output). It reports 384 candidates, 0 matches, but this
+does not test a latent Q4 sequence with continuous rendering. The saved reconstruction is
+weak for the following reasons:
 
 | | finding |
 |---|---|
-| **E1** | the model cannot represent the data: `3s` is the ceiling, yet block 0 measures a peak of **379 px** against a model max of **256** — `q=3` never occurs in block 0 |
-| **E2** | the `q` is not payload-like: a quaternary encoding of 256 key bits is uniform (~32 per value); this is **54 % `q==1`**, 1.6 % `q==3` |
+| **E1** | the particular recovered sequence reaches only `q=2` in block 0, so its rendered peak is **256 px** against a measured trace peak of **378 px**. The Q4 family allows `q=3` and a 384-px ceiling; this shows the extractor missed the peak, not that the family cannot represent it |
+| **E2** | the recovered sequence has **54 % `q==1`** and 1.6 % `q==3`. This imbalance is descriptive, not a rejection of the encoding |
 | **E3** | it barely beats a trivial baseline: rms **39.1 px** vs **43.2 px** for "one constant per block" and 82.8 px for the axis |
 
-Root cause, visible in the code: `amplitude_trace` keeps only pixels ≥ 20 % of the
-column max, and in blocks 0–2 each column contains several stroke crossings, so the
-centroid is meaningless; `recover_q` then takes the **median of 6 columns of a
-ramp**, which is not a symbol value. The Q4-DP idea is sound — it just needs to run
-on a correctly measured signal.
+The known decoder flaw is that `recover_q` takes the **median of 6 columns of a ramp**,
+which is not a justified state estimator. The external `amplitude_trace` source is not
+present in this repo, so the claim that blocks 0–2 have several upper-half crossings is
+unverified. The upper-half/full-column distinction in §2.4 explains how the mirrored
+image could produce multiple full-column bands without multiple upper-half crossings.
+The direct step-model negative is therefore weak; a continuous-renderer Q4 model remains open.
 
 ### 4.1 Plateau (exactly-horizontal run) list
 `halv/plateaus.npy`, 41 plateaus at score > 0.992. Examples:
@@ -261,7 +267,8 @@ image. Do not treat it as a dead end.
 | sign of the waveform as a channel | ✗ | §2.1 mirror-exact |
 | direct 3-px amplitude read as 256 payload symbols | ✗ | §2.4; intervening waveform geometry is omitted |
 | 3-px physical lattice inside a generator | ? | OPEN — not adjudicated by plateau widths |
-| amplitude as digits (3-smooth snap, 3^n/2^n ladder) | ✗ | §3, ladder is theme-determined |
+| sorted amplitude ladder itself as the key | ✗ | §3, the allowed set is theme structure |
+| time-ordered rung index as a payload channel | ? | OPEN — needs a reliable clock and centerline extraction |
 | circle/diamond as an independent bit | ✗ | §4.4, it *is* plateau length |
 | "the image only has ~118 bits" | ✗ | §4.4 |
 | brain-wallet phrases from the theme (≈110 tried) | ✗ | prior work, plausible |
@@ -307,6 +314,14 @@ per-element digit count over-counts, and 256 bits land inside one channel.
      Decide by target-blind reconstruction and held-out-block prediction, not plateau
      divisibility or address matching.
      This item is a prerequisite for 7.1 and for any Q4-DP.
+
+7.0c [NEW, HIGH] TEST THE MOD-3 PHASE LEAD
+     `python3 halv/phase_test.py` finds 28/41 high-confidence plateau starts at x mod 3=2;
+     this is stable across score thresholds and strongest in blocks 6 and 7. It is not yet
+     a proven symbol clock: pulse-start coordinates use a different phase convention and
+     the saved tail Viterbi turning points are not independently reliable. Recover a
+     centerline/event definition, then require the inferred phase to predict held-out blocks.
+     Do not make a 256-bit stream until one sample/state rule is supported by that test.
 
 7.1  [HIGHEST] Reconstruct the full 769-vertex signal exactly
      The model is now known and cheap:
@@ -379,6 +394,7 @@ halv/model.py       forward renderer for the 2-px stroked, mirrored polyline
 halv/viterbi.py     route item 7.1: Viterbi over integer vertex values
 halv/oracle.py      secp256k1 -> compressed/uncompressed P2PKH comparator (key-1 controls)
 halv/direct_q4.py   target-blind test of direct 6-px amplitude sampling
+halv/phase_test.py  modulo-3/6/96 event-phase audit
 halv/plateaus.npy   the 41 high-confidence plateaus  (level, x0, x1, length)
 halv/vit_700_860.npy  first Viterbi pass over the resolvable tail (see caveat below)
 halv/vit_568_858.npy  wider tail Viterbi pass (see §10.2 caveat)
@@ -476,13 +492,47 @@ on held-out later blocks, with phase and renderer family selected without the ad
 Only a unique low-residual reconstruction should feed run lengths, transition magnitudes,
 or a 128-state Q4 bit map.
 
+### 10.5 Modulo phase audit — promising 3-px alignment, not a clock proof
+
+`python3 halv/phase_test.py` measures event x-coordinates modulo 3, 6 and 96 from the
+saved full-image plateau detector and available (uncertified) tail Viterbi path. The
+address is not used. The strongest result is the plateau-start phase:
+
+| Plateau score threshold | Starts | x mod 3 = 0 | = 1 | = 2 |
+|---:|---:|---:|---:|---:|
+| 0.985 | 56 | 13 | 16 | 27 |
+| 0.990 | 51 | 12 | 8 | 31 |
+| 0.992 | 41 | 8 | 5 | 28 |
+| 0.995 | 32 | 5 | 2 | 25 |
+| 0.999 | 16 | 2 | 2 | 12 |
+
+At threshold 0.992, block 6 has 10/12 starts at residue 2 and block 7 has 17/19 at
+residue 2. Across the 41 detected starts, 28 share that phase; under an idealized
+independent uniform-residue null, the phase-scanned probability of a bin holding at least
+28 is about `1.5e-5`. Thresholds and events are correlated, however, and the detector/phase
+family was explored after seeing the image. Treat that number as a diagnostic, not a formal
+significance claim. All six modulo-6 residues occur, so this favors a three-pixel phase
+preference over a six-pixel phase.
+
+The 14 hand-tabulated tail pulse starts from §4.2 reproduce as residues `{0: 9, 1: 5,
+2: 0}`. Their phase-free probability of any empty residue class is about 0.0103 (the fixed
+phase probability `(2/3)^14 ≈ 0.0034` applies only if that phase was specified in advance).
+This event set uses a different coordinate convention from the plateau starts. The
+uncertified tail Viterbi turning points do not show a stable common phase.
+
+**Status:** this is a promising target-blind phase lead worth prioritizing. It supports a
+3-px geometric phase in the well-resolved tail, but does not establish one symbol per 3 px
+or yield 256 bits. Next derive an event/centerline definition whose phase predicts held-out
+blocks; decode one state per 3-px cell only if that model wins.
+
 ## 11. Continuation tree
 
 ```text
 HALV image
   ├─ File-level stego/hash routes ─────────────────────────── CLOSED / negative
   └─ 769-column rectified waveform
-       ├─ 8 × 96 halving blocks; normalized q={0,1,2,3} ─── CONFIRMED structure
+       ├─ 8 × 96 blocks; plateau q={1,2,3}, axis q=0 ─── CONFIRMED
+       ├─ Plateau starts favor x mod 3 = 2 ──────────────── PROMISING; clock unproved
        ├─ Direct x=90+phase+6i centroid samples ──────────── NO MATCH (288 keys; proxy only)
        └─ Recover the latent generator target-blind
             ├─ Fit exact sloped-stroke raster kernel
@@ -498,7 +548,9 @@ HALV image
 ```
 
 **Current confirmed:** rectification, 2-px stroke profile, 18-rung halving ladder,
-8×96 block scales, and three normalized nonzero plateau levels plus the zero axis. **Current negative:**
+8×96 block scales, three normalized nonzero plateau levels plus the zero axis, and a
+mod-3 plateau-start phase preference in the resolved tail. **Current negative:**
 the old direct 3-px amplitude stream and uniform 6-px step cells. **Exploratory no-match:**
-direct 6-px centroid sampling. **Still open:** physical 3-px lattice, latent 6-px continuous Q4 clock, the exact
-vertex path, run-length payload, 256-bit extraction, and the private key.
+direct 6-px centroid sampling. **Still open:** a 3-px phase/lattice interpretation, latent
+6-px continuous Q4 clock, the exact vertex path, run-length payload, 256-bit extraction,
+and the private key.

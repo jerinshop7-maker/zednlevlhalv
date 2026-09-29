@@ -2,10 +2,10 @@
 """
 HALV block/clock structure tests.
 
-T1  CONFIRMED : the waveform is 8 x 96-px halving blocks; block b has scale
-                s = 128/2^b and only ever uses levels {s, 2s, 3s}
-                (equivalently q in {0,1,2,3}, q=0 == the axis y=475).
-                This closes exactly onto the 18-rung ladder {3*2^k} U {2^k}.
+T1  CONFIRMED : confidently detected flat plateaus in 8 x 96-px blocks use
+                levels {s, 2s, 3s}, where s=128/2^b; the zero axis is q=0.
+                Continuous ramp values between plateaus are not restricted to these.
+                The plateau-level family closes onto the ladder {3*2^k} U {2^k}.
 
 T2  LIMITED   : plateau lengths do not support a 6-px step/plateau clock.
                 This does not test a latent 6-px clock with continuous rendering.
@@ -51,7 +51,7 @@ def column_scores():
 
 def t1_block_structure(S, thr=0.985):
     print('=' * 74)
-    print('T1  8 x 96-px halving blocks, scale 128/2^b, levels only in {s,2s,3s}')
+    print('T1  8 x 96-px blocks: detected plateau levels lie in {s,2s,3s}')
     print('=' * 74)
     print(' blk  x-range      scale   allowed {s,2s,3s}   observed    q-units  verdict')
     ok_all = True
